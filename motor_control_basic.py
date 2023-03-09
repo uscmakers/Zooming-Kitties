@@ -47,7 +47,12 @@ def gstreamer_pipeline(
     )
 
 
-def face_detect(vehicle):
+def face_detect():
+    vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
+    print("Successfully connected to vehicle at " + connection_string + "!")
+    vehicle.armed = True
+    time.sleep(1)
+    
     window_title = "Face Detect"
     face_cascade = cv2.CascadeClassifier(
         "/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml"
@@ -68,10 +73,9 @@ def face_detect(vehicle):
                 
                 if len(faces) == 0:
                     vehicle.channels.overrides['1'] = 2000
-                    time.sleep(2)
                 else:
                     vehicle.channels.overrides['1'] = 1000
-                    time.sleep(2)
+                time.sleep(1)
 
                 # Check to see if the user closed the window
                 # Under GTK+ (Jetson Default), WND_PROP_VISIBLE does not work correctly. Under Qt it does
@@ -89,16 +93,10 @@ def face_detect(vehicle):
             cv2.destroyAllWindows()
     else:
         print("Unable to open camera")
-
-def main():
-    vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
-    print("Successfully connected to vehicle at " + connection_string + "!")
-    vehicle.armed = True
-    time.sleep(1)
-    face_detect(vehicle)
+        
     vehicle.armed = False
     vehicle.close()
     print("Closed vehicle.")
 
 if __name__ == "__main__":
-    main()
+    face_detect()
