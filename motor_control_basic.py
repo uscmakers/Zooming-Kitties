@@ -61,15 +61,17 @@ def face_detect(vehicle):
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
-                if len(faces) == 0:
-                    vehicle.channels.overrides['3'] = 1500
-                else:
-                    vehicle.channels.overrides['3'] = 2000
-
                 for (x, y, w, h) in faces:
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
                     roi_gray = gray[y : y + h, x : x + w]
                     roi_color = frame[y : y + h, x : x + w]
+                
+                if len(faces) == 0:
+                    vehicle.channels.overrides['3'] = 2000
+                    sleep(1)
+                else:
+                    vehicle.channels.overrides['3'] = 1500
+                    sleep(1)
 
                 # Check to see if the user closed the window
                 # Under GTK+ (Jetson Default), WND_PROP_VISIBLE does not work correctly. Under Qt it does
