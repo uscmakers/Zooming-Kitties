@@ -74,6 +74,11 @@ def face_detect():
                     roi_gray = gray[y : y + h, x : x + w]
                     roi_color = frame[y : y + h, x : x + w]
                 #time.sleep(1)
+                
+                if len(faces) == 0:
+                    print("no faces detected...")
+                else:
+                    print("detected!")
 
                 # Check to see if the user closed the window
                 # Under GTK+ (Jetson Default), WND_PROP_VISIBLE does not work correctly. Under Qt it does
