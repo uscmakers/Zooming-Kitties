@@ -52,10 +52,10 @@ def face_detect():
     print("Successfully connected to vehicle at " + connection_string + "!")
     vehicle.armed = True
     time.sleep(1)
-    vehicle.channels.overrides['1'] = 2000
+    vehicle.channels.overrides['3'] = 2000
     print("sleeping 5 seconds")
     time.sleep(5)
-    vehicle.channels.overrides['1'] = 1000
+    vehicle.channels.overrides['3'] = 1000
         
     vehicle.armed = False
     vehicle.close()
