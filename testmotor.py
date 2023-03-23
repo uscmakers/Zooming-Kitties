@@ -5,8 +5,8 @@ vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
 print("Successfully connected to vehicle at " + connection_string + "!")
 vehicle.armed = True
 print("Armed is true")
-time.sleep(1)
-print("Slept 1 second")
+time.sleep(10)
+print("Slept 10 seconds")
 
 pos1=2000
 pos2=1000
