@@ -52,7 +52,7 @@ def face_detect():
     print("Successfully connected to vehicle at " + connection_string + "!")
     vehicle.armed = True
     time.sleep(1)
-    
+
     window_title = "Face Detect"
     face_cascade = cv2.CascadeClassifier(
         "/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml"
@@ -61,6 +61,9 @@ def face_detect():
     if video_capture.isOpened():
         try:
             cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
+            vehicle.channels.overrides['1'] = 2000
+            time.sleep(5)
+            vehicle.channels.overrides['1'] = 1000
             while True:
                 ret, frame = video_capture.read()
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -70,12 +73,7 @@ def face_detect():
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
                     roi_gray = gray[y : y + h, x : x + w]
                     roi_color = frame[y : y + h, x : x + w]
-                
-                if len(faces) == 0:
-                    vehicle.channels.overrides['1'] = 2000
-                else:
-                    vehicle.channels.overrides['1'] = 1000
-                time.sleep(1)
+                #time.sleep(1)
 
                 # Check to see if the user closed the window
                 # Under GTK+ (Jetson Default), WND_PROP_VISIBLE does not work correctly. Under Qt it does
