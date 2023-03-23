@@ -62,6 +62,7 @@ def face_detect():
         try:
             cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
             vehicle.channels.overrides['1'] = 2000
+            print("sleeping 5 seconds")
             time.sleep(5)
             vehicle.channels.overrides['1'] = 1000
             while True:
