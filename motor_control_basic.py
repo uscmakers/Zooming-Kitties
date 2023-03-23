@@ -77,6 +77,8 @@ def face_detect():
                     print("sleeping 1 second")
                     time.sleep(1)
                     vehicle.channels.overrides['3'] = 1000
+                    print("sleeping 1 second")
+                    time.sleep(1)
                 else:
                     print("detected!")
 
