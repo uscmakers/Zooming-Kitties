@@ -52,16 +52,16 @@ def face_detect():
     print("Successfully connected to vehicle at " + connection_string + "!")
     vehicle.armed = True
     time.sleep(1)
+    vehicle.channels.overrides['1'] = 2000
+    print("sleeping 5 seconds")
+    time.sleep(5)
+    vehicle.channels.overrides['1'] = 1000
 
     window_title = "Face Detect"
     face_cascade = cv2.CascadeClassifier(
         "/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml"
     )
     video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
-    vehicle.channels.overrides['1'] = 2000
-    print("sleeping 5 seconds")
-    time.sleep(5)
-    vehicle.channels.overrides['1'] = 1000
     if video_capture.isOpened():
         try:
             cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
