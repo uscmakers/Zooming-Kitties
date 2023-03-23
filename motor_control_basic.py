@@ -61,10 +61,6 @@ def face_detect():
     if video_capture.isOpened():
         try:
             cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
-            vehicle.channels.overrides['3'] = 2000
-            print("sleeping 5 seconds")
-            time.sleep(5)
-            vehicle.channels.overrides['3'] = 1000
             while True:
                 ret, frame = video_capture.read()
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -77,7 +73,10 @@ def face_detect():
                 #time.sleep(1)
                 
                 if len(faces) == 0:
-                    print("no faces detected...")
+                    vehicle.channels.overrides['3'] = 2000
+                    print("sleeping 1 second")
+                    time.sleep(1)
+                    vehicle.channels.overrides['3'] = 1000
                 else:
                     print("detected!")
 
