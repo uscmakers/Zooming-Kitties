@@ -52,46 +52,10 @@ def face_detect():
     print("Successfully connected to vehicle at " + connection_string + "!")
     vehicle.armed = True
     time.sleep(1)
-    print(vehicle.mode)
-    vehicle.channels.overrides['3'] = 2000
+    vehicle.channels.overrides['1'] = 2000
     print("sleeping 5 seconds")
     time.sleep(5)
-    vehicle.channels.overrides['3'] = 1000
-
-    window_title = "Face Detect"
-    face_cascade = cv2.CascadeClassifier(
-        "/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml"
-    )
-    video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
-    if video_capture.isOpened():
-        try:
-            cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
-            while True:
-                ret, frame = video_capture.read()
-                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-
-                for (x, y, w, h) in faces:
-                    cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                    roi_gray = gray[y : y + h, x : x + w]
-                    roi_color = frame[y : y + h, x : x + w]
-
-                # Check to see if the user closed the window
-                # Under GTK+ (Jetson Default), WND_PROP_VISIBLE does not work correctly. Under Qt it does
-                # GTK - Substitute WND_PROP_AUTOSIZE to detect if window has been closed by user
-                if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
-                    cv2.imshow(window_title, frame)
-                else:
-                    break
-                keyCode = cv2.waitKey(10) & 0xFF
-                # Stop the program on the ESC key or 'q'
-                if keyCode == 27 or keyCode == ord('q'):
-                    break
-        finally:
-            video_capture.release()
-            cv2.destroyAllWindows()
-    else:
-        print("Unable to open camera")
+    vehicle.channels.overrides['1'] = 1000
         
     vehicle.armed = False
     vehicle.close()
