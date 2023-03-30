@@ -1,3 +1,6 @@
+JETSON IP ADDRESS:
+ssh zk@172.20.10.2
+
 To find available ports:
 ls -lt /dev/tty*
 dmesg | grep tty
