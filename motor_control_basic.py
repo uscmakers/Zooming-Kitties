@@ -55,7 +55,7 @@ def face_detect():
 
     window_title = "Face Detect"
     face_cascade = cv2.CascadeClassifier(
-        "fist.xml"
+        "/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml"
     )
     video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
     if video_capture.isOpened():
