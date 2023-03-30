@@ -70,17 +70,13 @@ def face_detect():
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
                     roi_gray = gray[y : y + h, x : x + w]
                     roi_color = frame[y : y + h, x : x + w]
-                #time.sleep(1)
                 
                 if len(faces) == 0:
                     vehicle.channels.overrides['3'] = 2000
-                    print("sleeping 1 second")
-                    time.sleep(1)
-                    vehicle.channels.overrides['3'] = 1000
-                    print("sleeping 1 second")
-                    time.sleep(1)
+                    print("nothing")
                 else:
-                    print("detected!")
+                    vehicle.channels.overrides['3'] = 1000
+                    print("detected")
 
                 # Check to see if the user closed the window
                 # Under GTK+ (Jetson Default), WND_PROP_VISIBLE does not work correctly. Under Qt it does
@@ -99,6 +95,7 @@ def face_detect():
     else:
         print("Unable to open camera")
         
+    vehicle.channels.overrides['3'] = 2000
     vehicle.armed = False
     vehicle.close()
     print("Closed vehicle.")

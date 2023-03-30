@@ -8,14 +8,14 @@ vehicle.armed = True
 pos1=2000
 pos2=1000
 vehicle.channels.overrides['1'] = pos1  # out of 2000
-vehicle.channels.overrides['3'] = 2000  # out of 2000
+# vehicle.channels.overrides['3'] = 2000  # out of 2000
 
 print("Just set channel 1 to "+ str(pos1) + ". About to sleep for 10 seconds...")
 
 time.sleep(5)
 print("Setting channel 1 back to " + str(pos2))
 vehicle.channels.overrides['1'] = pos2
-vehicle.channels.overrides['3'] = 1000  # out of 2000
+# vehicle.channels.overrides['3'] = 1000  # out of 2000
 print("Sleeping for 10s...")
 time.sleep(10)
 vehicle.armed = False
