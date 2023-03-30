@@ -73,10 +73,10 @@ def face_detect():
                 
                 if len(faces) == 0:
                     vehicle.channels.overrides['3'] = 1000
-                    print("nothing and sleeping 1 second")
+                    print("nothing")
                 else:
                     vehicle.channels.overrides['3'] = 2000
-                    print("detected and sleeping 1 second")
+                    print("detected")
 
                 # Check to see if the user closed the window
                 # Under GTK+ (Jetson Default), WND_PROP_VISIBLE does not work correctly. Under Qt it does
