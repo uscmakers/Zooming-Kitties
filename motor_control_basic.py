@@ -70,16 +70,11 @@ def face_detect():
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
                     roi_gray = gray[y : y + h, x : x + w]
                     roi_color = frame[y : y + h, x : x + w]
-                #time.sleep(1)
                 
                 if len(faces) == 0:
-                    vehicle.channels.overrides['3'] = 2000
-                    print("sleeping 1 second")
-                    time.sleep(1)
                     vehicle.channels.overrides['3'] = 1000
-                    print("sleeping 1 second")
-                    time.sleep(1)
                 else:
+                    vehicle.channels.overrides['3'] = 2000
                     print("detected!")
 
                 # Check to see if the user closed the window
