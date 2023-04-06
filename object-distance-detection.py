@@ -93,7 +93,7 @@ def main():
 				print(inches)
 
 				# Display bounded rectangle
-				cv2.rectangle(frame, (marker[0][0], marker[0][1]), (marker[0][0] + marker[1][0], marker[0][1] + marker[1][1]), (255, 0, 0), 2)
+				cv2.rectangle(frame, (int(marker[0][0]), int(marker[0][1])), (int(marker[0][0] + marker[1][0]), int(marker[0][1] + marker[1][1])), (255, 0, 0), 2)
 
 				# Check to see if the user closed the window
 				if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
