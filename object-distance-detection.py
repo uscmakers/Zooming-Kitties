@@ -2,9 +2,9 @@
 
 from dronekit import connect
 import time
+import imutils
 from imutils import paths
 import numpy as np
-import imutils
 import cv2
 
 ### CONSTANTS ###
