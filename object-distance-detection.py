@@ -86,7 +86,7 @@ def main():
 				ret, frame = video_capture.read()
 				# Get the bounded rectangle of the marker
 				marker = find_marker(frame)
-				# [[x,y],[w,h],[θ]]
+				# [[x,y],[w,h],[angle]]
 				perceived_width = marker[1][0]
 				# Use triangle similarity to get distance from camera to marker
 				inches = distance_to_camera(KNOWN_WIDTH, FOCAL_LENGTH, perceived_width)
