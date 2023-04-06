@@ -52,6 +52,9 @@ def find_marker(image):
 	# We assume that the object with the largest contour is our marker
 	cnts = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 	cnts = imutils.grab_contours(cnts)
+	# Return None if no contour found
+	if cnts.size() == 0:
+		return None
 	c = max(cnts, key = cv2.contourArea)
 	# Compute the bounding box of the of the marker
 	# Returns ( top-left corner(x,y), (width, height), angle of rotation )
@@ -82,12 +85,11 @@ def main():
 			cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
 			# TODO: Get window size (in particular, width) to calculate angle
 			while True:
-				# Grab the video frame
+				# Grab the video frame (ret is false if no frames have been grabbed)
 				ret, frame = video_capture.read()
-				# Boolean ret is false if no frames have been grabbed
-				if ret:
-					# Get the bounded rectangle of the marker
-					marker = find_marker(frame)
+				# Get the bounded rectangle of the marker
+				marker = find_marker(frame)
+				if marker != None:
 					# [[x,y],[w,h],[angle]]
 					perceived_width = marker[1][0]
 					# Use triangle similarity to get distance from camera to marker
@@ -97,11 +99,11 @@ def main():
 					# Display bounded rectangle
 					cv2.rectangle(frame, (int(marker[0][0]), int(marker[0][1])), (int(marker[0][0] + marker[1][0]), int(marker[0][1] + marker[1][1])), (255, 0, 0), 2)
 
-					# Check to see if the user closed the window
-					if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
-						cv2.imshow(window_title, frame)
-					else:
-						break
+				# Check to see if the user closed the window
+				if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
+					cv2.imshow(window_title, frame)
+				else:
+					break
 				keyCode = cv2.waitKey(10) & 0xFF
 				# Stop the program on the ESC key or 'q'
 				if keyCode == 27 or keyCode == ord('q'):
