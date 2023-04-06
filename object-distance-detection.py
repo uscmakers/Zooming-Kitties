@@ -53,7 +53,7 @@ def find_marker(image):
 	cnts = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 	cnts = imutils.grab_contours(cnts)
 	# Return None if no contour found
-	if cnts.size() == 0:
+	if len(cnts) == 0:
 		return None
 	c = max(cnts, key = cv2.contourArea)
 	# Compute the bounding box of the of the marker
