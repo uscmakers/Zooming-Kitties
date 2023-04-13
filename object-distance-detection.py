@@ -2,6 +2,8 @@
 
 from dronekit import connect
 import time
+import argparse
+import sys
 import imutils
 from imutils import paths
 import numpy as np
@@ -13,7 +15,10 @@ connection_string = '/dev/ttyACM0'
 
 KNOWN_WIDTH = 11
 KNOWN_HEIGHT = 8.5
-FOCAL_LENGTH = 1
+FOCAL_LENGTH = 1 # TODO: calibrate
+
+aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_50)
+aruco_params = cv2.aruco.DetectorParameters_create()
 
 def gstreamer_pipeline(
     capture_width=1920,
@@ -43,23 +48,6 @@ def gstreamer_pipeline(
 
 ### HELPER FUNCS ###
 
-def find_marker(image):
-	# Convert the image to grayscale, blur it, and detect edges
-	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-	gray = cv2.GaussianBlur(gray, (5, 5), 0)
-	edged = cv2.Canny(gray, 35, 125)
-	# Find the contours in the edged image and keep the one with maximum area
-	# We assume that the object with the largest contour is our marker
-	cnts = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-	cnts = imutils.grab_contours(cnts)
-	# Return None if no contour found
-	if len(cnts) == 0:
-		return None
-	c = max(cnts, key = cv2.contourArea)
-	# Compute the bounding box of the of the marker
-	# Returns ( top-left corner(x,y), (width, height), angle of rotation )
-	return cv2.minAreaRect(c)
-
 def distance_to_camera(W, F, P):
 	# Compute and return the distance from the marker to the camera
 	# Triangle similarity equation: F = (P x D) / W
@@ -76,9 +64,6 @@ def main():
 	time.sleep(1)
 
 	window_title = "Object Distance Detection"
-	face_cascade = cv2.CascadeClassifier(
-		"/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml"
-	)
 	video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
 	if video_capture.isOpened():
 		try:
@@ -87,17 +72,34 @@ def main():
 			while True:
 				# Grab the video frame (ret is false if no frames have been grabbed)
 				ret, frame = video_capture.read()
-				# Get the bounded rectangle of the marker
-				marker = find_marker(frame)
-				if marker != None:
-					# [[x,y],[w,h],[angle]]
-					perceived_width = marker[1][0]
-					# Use triangle similarity to get distance from camera to marker
-					inches = distance_to_camera(KNOWN_WIDTH, FOCAL_LENGTH, perceived_width)
-					print(inches)
+				# Get list of corners of aruco markers in frame
+				(corners, ids, rejected) = cv2.aruco.detectMarkers(image=frame, dictionary=aruco_dict, parameters=aruco_params)
+				# Check if at least one marker was found
+				if len(corners) > 0:
+					ids = ids.flatten()
+					# TUTORIAL COPIED CODE
+					for (markerCorner, markerID) in zip(corners, ids):
+						corners = markerCorner.reshape((4, 2))
+						(topLeft, topRight, bottomRight, bottomLeft) = corners
+						topRight = (int(topRight[0]), int(topRight[1]))
+						bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
+						bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
+						topLeft = (int(topLeft[0]), int(topLeft[1]))
+						# draw the bounding box of the ArUCo detection
+						cv2.line(frame, topLeft, topRight, (0, 255, 0), 2)
+						cv2.line(frame, topRight, bottomRight, (0, 255, 0), 2)
+						cv2.line(frame, bottomRight, bottomLeft, (0, 255, 0), 2)
+						cv2.line(frame, bottomLeft, topLeft, (0, 255, 0), 2)
+						# compute and draw the center (x, y)-coordinates of the
+						# ArUco marker
+						cX = int((topLeft[0] + bottomRight[0]) / 2.0)
+						cY = int((topLeft[1] + bottomRight[1]) / 2.0)
+						cv2.circle(frame, (cX, cY), 4, (0, 0, 255), -1)
+						# draw the ArUco marker ID on the frame
+						cv2.putText(frame, str(markerID), (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
-					# Display bounded rectangle
-					cv2.rectangle(frame, (int(marker[0][0]), int(marker[0][1])), (int(marker[0][0] + marker[1][0]), int(marker[0][1] + marker[1][1])), (255, 0, 0), 2)
+				# Use triangle similarity to get distance from camera to marker
+				# inches = distance_to_camera(KNOWN_WIDTH, FOCAL_LENGTH, perceived_width)
 
 				# Check to see if the user closed the window
 				if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
