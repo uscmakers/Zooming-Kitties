@@ -17,9 +17,6 @@ KNOWN_WIDTH = 11
 KNOWN_HEIGHT = 8.5
 FOCAL_LENGTH = 1 # TODO: calibrate
 
-aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_50)
-aruco_params = cv2.aruco.DetectorParameters_create()
-
 def gstreamer_pipeline(
     capture_width=1920,
     capture_height=1080,
@@ -58,6 +55,9 @@ def distance_to_camera(W, F, P):
 ### MAIN ROUTINE ###
 
 def main():
+	aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_50)
+	aruco_params = cv2.aruco.DetectorParameters_create()
+
 	vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
 	print("Successfully connected to vehicle at " + connection_string + "!")
 	vehicle.armed = True
