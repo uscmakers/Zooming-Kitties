@@ -8,6 +8,7 @@ import imutils
 from imutils import paths
 import numpy as np
 import cv2
+from cv2 import aruco
 
 ### CONSTANTS ###
 
@@ -55,8 +56,8 @@ def distance_to_camera(W, F, P):
 ### MAIN ROUTINE ###
 
 def main():
-	aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_50)
-	aruco_params = cv2.aruco.DetectorParameters_create()
+	aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_50)
+	aruco_params = aruco.DetectorParameters_create()
 
 	vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
 	print("Successfully connected to vehicle at " + connection_string + "!")
