@@ -8,7 +8,8 @@ import imutils
 from imutils import paths
 import numpy as np
 import cv2
-from cv2 import aruco
+from pupil_apriltags import Detector
+import copy
 
 ### CONSTANTS ###
 
@@ -17,6 +18,16 @@ connection_string = '/dev/ttyACM0'
 KNOWN_WIDTH = 11
 KNOWN_HEIGHT = 8.5
 FOCAL_LENGTH = 1 # TODO: calibrate
+
+at_detector = Detector( 
+	families="tag36h11",
+	nthreads=1,
+	quad_decimate=1.0,
+	quad_sigma=0.0,
+	refine_edges=1,
+	decode_sharpening=0.25,
+	debug=0
+) # April Tag detector
 
 def gstreamer_pipeline(
     capture_width=1920,
@@ -53,12 +64,34 @@ def distance_to_camera(W, F, P):
 
 # TODO: Make angle helper function
 
+# COPIED FROM [https://github.com/Kazuhito00/AprilTag-Detection-Python-Sample/blob/main/sample.py]
+def draw_tags(image, tags):
+    for tag in tags:
+        center = tag.center
+        corners = tag.corners
+
+        center = (int(center[0]), int(center[1]))
+        corner_01 = (int(corners[0][0]), int(corners[0][1]))
+        corner_02 = (int(corners[1][0]), int(corners[1][1]))
+        corner_03 = (int(corners[2][0]), int(corners[2][1]))
+        corner_04 = (int(corners[3][0]), int(corners[3][1]))
+
+        cv2.circle(image, (center[0], center[1]), 5, (0, 0, 255), 2)
+
+        cv2.line(image, (corner_01[0], corner_01[1]),
+                (corner_02[0], corner_02[1]), (255, 0, 0), 2)
+        cv2.line(image, (corner_02[0], corner_02[1]),
+                (corner_03[0], corner_03[1]), (255, 0, 0), 2)
+        cv2.line(image, (corner_03[0], corner_03[1]),
+                (corner_04[0], corner_04[1]), (0, 255, 0), 2)
+        cv2.line(image, (corner_04[0], corner_04[1]),
+                (corner_01[0], corner_01[1]), (0, 255, 0), 2)
+    
+    return image
+
 ### MAIN ROUTINE ###
 
 def main():
-	aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_50)
-	aruco_params = aruco.DetectorParameters_create()
-
 	vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
 	print("Successfully connected to vehicle at " + connection_string + "!")
 	vehicle.armed = True
@@ -73,31 +106,17 @@ def main():
 			while True:
 				# Grab the video frame (ret is false if no frames have been grabbed)
 				ret, frame = video_capture.read()
-				# Get list of corners of aruco markers in frame
-				(corners, ids, rejected) = cv2.aruco.detectMarkers(image=frame, dictionary=aruco_dict, parameters=aruco_params)
-				# Check if at least one marker was found
-				if len(corners) > 0:
-					ids = ids.flatten()
-					# TUTORIAL COPIED CODE
-					for (markerCorner, markerID) in zip(corners, ids):
-						corners = markerCorner.reshape((4, 2))
-						(topLeft, topRight, bottomRight, bottomLeft) = corners
-						topRight = (int(topRight[0]), int(topRight[1]))
-						bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
-						bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
-						topLeft = (int(topLeft[0]), int(topLeft[1]))
-						# draw the bounding box of the ArUCo detection
-						cv2.line(frame, topLeft, topRight, (0, 255, 0), 2)
-						cv2.line(frame, topRight, bottomRight, (0, 255, 0), 2)
-						cv2.line(frame, bottomRight, bottomLeft, (0, 255, 0), 2)
-						cv2.line(frame, bottomLeft, topLeft, (0, 255, 0), 2)
-						# compute and draw the center (x, y)-coordinates of the
-						# ArUco marker
-						cX = int((topLeft[0] + bottomRight[0]) / 2.0)
-						cY = int((topLeft[1] + bottomRight[1]) / 2.0)
-						cv2.circle(frame, (cX, cY), 4, (0, 0, 255), -1)
-						# draw the ArUco marker ID on the frame
-						cv2.putText(frame, str(markerID), (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+				dbg_image = copy.deepcopy(frame)
+    			# Convert frame to grayscale
+				image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+       			# Get list of april tags
+				tags = at_detector.detect(image)
+       			# Draw tags
+				dbg_image = draw_tags(dbg_image, tags)
+				if(len(tags) > 0):
+					print("detected")
+				else:
+					print("nothing")
 
 				# Use triangle similarity to get distance from camera to marker
 				# inches = distance_to_camera(KNOWN_WIDTH, FOCAL_LENGTH, perceived_width)
