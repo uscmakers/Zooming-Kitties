@@ -1,5 +1,6 @@
 ### IMPORTS ###
 
+import math
 from dronekit import connect
 import time
 import argparse
@@ -47,7 +48,7 @@ def gstreamer_pipeline(
 ### HELPER FUNCS ###
 
 def calculate_dist(p1, p2):
-	return ((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2)**(0.5)
+	return math.sqrt((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2)
 
 def distance_to_camera(W, F, P):
 	# Compute and return the distance from the marker to the camera
