@@ -79,10 +79,7 @@ def main():
 				# Get list of april tags
 				tags = at_detector.detect(image)
        			# Draw tags
-				if(len(tags) > 0):
-					print("detected")
-				else:
-					print("nothing")
+				print(len(tags))
 
 				# Use triangle similarity to get distance from camera to marker
 				# inches = distance_to_camera(KNOWN_WIDTH, FOCAL_LENGTH, perceived_width)
