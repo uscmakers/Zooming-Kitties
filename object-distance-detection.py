@@ -80,7 +80,8 @@ def main():
 				tags = at_detector.detect(image)
        			# Draw tags
 				print(len(tags))
-
+				for tag in tags:
+					print(tag)
 				# Use triangle similarity to get distance from camera to marker
 				# inches = distance_to_camera(KNOWN_WIDTH, FOCAL_LENGTH, perceived_width)
 
