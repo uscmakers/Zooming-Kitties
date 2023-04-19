@@ -93,7 +93,7 @@ def main():
 					y = tag.center[1]
 					w = calculate_dist(tag.corners[0], tag.corners[1])
 					h = calculate_dist(tag.corners[0], tag.corners[2])
-					# print(x, y, w, h)
+					print(x, y, w, h)
 					
 				# Use triangle similarity to get distance from camera to marker
 				# inches = distance_to_camera(KNOWN_WIDTH, FOCAL_LENGTH, perceived_width)
