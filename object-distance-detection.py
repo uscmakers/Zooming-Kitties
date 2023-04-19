@@ -8,7 +8,7 @@ import imutils
 from imutils import paths
 import numpy as np
 import cv2
-from pupil_apriltags import Detector
+import apriltag
 import copy
 
 ### CONSTANTS ###
@@ -19,7 +19,7 @@ KNOWN_WIDTH = 11
 KNOWN_HEIGHT = 8.5
 FOCAL_LENGTH = 1 # TODO: calibrate
 
-at_detector = Detector( 
+at_detector = apriltag.Detector( 
 	families="tag36h11",
 	nthreads=1,
 	quad_decimate=1.0,
