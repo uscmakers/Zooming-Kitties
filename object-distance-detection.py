@@ -1,7 +1,6 @@
 ### IMPORTS ###
 
 from dronekit import connect
-import math
 import time
 import argparse
 import sys
@@ -47,6 +46,9 @@ def gstreamer_pipeline(
 
 ### HELPER FUNCS ###
 
+def calculate_dist(p1, p2):
+	return ((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2)**(0.5)
+
 def distance_to_camera(W, F, P):
 	# Compute and return the distance from the marker to the camera
 	# Triangle similarity equation: F = (P x D) / W
@@ -86,8 +88,8 @@ def main():
 				for tag in tags:
 					x = tag.center[0]
 					y = tag.center[1]
-					w = math.dist(tag.corners[0][0], tag.corners[0][1])
-					h = math.dist(tag.corners[0][0], tag.corners[1][0])
+					w = calculate_dist(tag.corners[0][0], tag.corners[0][1])
+					h = calculate_dist(tag.corners[0][0], tag.corners[1][0])
 					print(x, y, w, h)
 					
 				# Use triangle similarity to get distance from camera to marker
