@@ -63,8 +63,6 @@ def main():
 	# vehicle.armed = True
 	# time.sleep(1)
 
-	at_detector = apriltag.Detector()
-
 	window_title = "Object Distance Detection"
 	video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
 	if video_capture.isOpened():
@@ -77,7 +75,8 @@ def main():
 				dbg_image = copy.deepcopy(frame)
     			# Convert frame to grayscale
 				image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-       			# Get list of april tags
+				at_detector = apriltag.Detector(searchpath=apriltag._get_demo_searchpath())
+				# Get list of april tags
 				tags = at_detector.detect(image)
        			# Draw tags
 				if(len(tags) > 0):
