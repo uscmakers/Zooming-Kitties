@@ -55,7 +55,8 @@ def distance_to_camera(W, F, P):
 	# Triangle similarity equation: F = (P x D) / W
 	return (W * F) / P
 
-# TODO: Make angle helper function
+def angle_to_marker(window_width, c_x):
+    return (1000/window_width)*c_x + 1000
 
 ### MAIN ROUTINE ###
 
@@ -71,7 +72,8 @@ def main():
 	if video_capture.isOpened():
 		try:
 			cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
-			# TODO: Get window size (in particular, width) to calculate angle
+			(x_window, y_window, w_window, h_window) = cv2.getWindowImageRect('Frame')
+			print(x_window, y_window, w_window, h_window)
 			while True:
 				# Grab the video frame (ret is false if no frames have been grabbed)
 				ret, frame = video_capture.read()
@@ -91,7 +93,7 @@ def main():
 					y = tag.center[1]
 					w = calculate_dist(tag.corners[0], tag.corners[1])
 					h = calculate_dist(tag.corners[0], tag.corners[2])
-					print(x, y, w, h)
+					# print(x, y, w, h)
 					
 				# Use triangle similarity to get distance from camera to marker
 				# inches = distance_to_camera(KNOWN_WIDTH, FOCAL_LENGTH, perceived_width)
