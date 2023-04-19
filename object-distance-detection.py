@@ -8,7 +8,7 @@ import imutils
 from imutils import paths
 import numpy as np
 import cv2
-import apriltag.python.apriltag.py as apriltag
+import apriltag.python.apriltag as apriltag
 import copy
 
 ### CONSTANTS ###
