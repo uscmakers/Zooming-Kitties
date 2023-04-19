@@ -58,10 +58,10 @@ def distance_to_camera(W, F, P):
 
 def main():
 
-	vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
-	print("Successfully connected to vehicle at " + connection_string + "!")
-	vehicle.armed = True
-	time.sleep(1)
+	# vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
+	# print("Successfully connected to vehicle at " + connection_string + "!")
+	# vehicle.armed = True
+	# time.sleep(1)
 
 	at_detector = apriltag.Detector()
 
@@ -103,9 +103,9 @@ def main():
 	else:
 		print("Unable to open camera")
         
-	vehicle.channels.overrides['3'] = 2000
-	vehicle.armed = False
-	vehicle.close()
+	# vehicle.channels.overrides['3'] = 2000
+	# vehicle.armed = False
+	# vehicle.close()
 	print("Closed vehicle")
 
 if __name__ == "__main__":
