@@ -15,6 +15,9 @@ import apriltag.python.apriltag as apriltag
 
 connection_string = '/dev/ttyACM0'
 
+WINDOW_WIDTH = 1000
+WINDOW_HEIGHT = 700
+
 KNOWN_WIDTH = 11
 KNOWN_HEIGHT = 8.5
 FOCAL_LENGTH = 1 # TODO: calibrate
@@ -71,9 +74,8 @@ def main():
 	video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
 	if video_capture.isOpened():
 		try:
-			cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
-			(x_window, y_window, w_window, h_window) = cv2.getWindowImageRect('Frame')
-			print(x_window, y_window, w_window, h_window)
+			cv2.namedWindow(window_title, cv2.WINDOW_NORMAL)
+			cv2.resizeWindow(window_title, WINDOW_WIDTH, WINDOW_HEIGHT)
 			while True:
 				# Grab the video frame (ret is false if no frames have been grabbed)
 				ret, frame = video_capture.read()
