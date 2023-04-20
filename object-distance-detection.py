@@ -82,9 +82,9 @@ def main():
 			cv2.resizeWindow(window_title, WINDOW_WIDTH, WINDOW_HEIGHT)
 			while True:
 				# Grab the video frame (ret is false if no frames have been grabbed)
-				ret, frame = video_capture.read()
-    			# Convert frame to grayscale
-				image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+				ret, image = video_capture.read()
+    			# Convert image to grayscale
+				# image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 				at_detector = apriltag.Detector(searchpath=apriltag._get_demo_searchpath())
 				# Get list of april tags
 				tags = at_detector.detect(image)
