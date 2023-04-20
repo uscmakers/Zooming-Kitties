@@ -15,13 +15,18 @@ import apriltag.python.apriltag as apriltag
 
 connection_string = '/dev/ttyACM0'
 
-WINDOW_WIDTH = 1000
-WINDOW_HEIGHT = 800
+# FROM RPI CAM V2 DATASHEET
+MM_PER_PIXEL = 0.00112 # mm per pixel
+FOCAL_LENGTH_MM = 3.04 # mm
+FOCAL_LENGTH_PX = FOCAL_LENGTH_MM / MM_PER_PIXEL # pixels
 
-# UNITS: mm
-TAG_WIDTH = 30
-TAG_HEIGHT = 30
-FOCAL_LENGTH = 3.04 # SOURCE: RPi camera V2 datasheet
+# SELF SELECTED VALUES
+WINDOW_WIDTH = 1000 # pixels
+WINDOW_HEIGHT = 800 # pixels
+
+# STANDARD TAGS WE ARE CURRENTLY USING
+TAG_WIDTH = 30 # mm
+TAG_HEIGHT = 30 # mm
 
 def gstreamer_pipeline(
     capture_width=1920,
