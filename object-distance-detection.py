@@ -15,10 +15,8 @@ import apriltag.python.apriltag as apriltag
 
 connection_string = '/dev/ttyACM0'
 
-# FROM RPI CAM V2 DATASHEET
-MM_PER_PIXEL = 0.00112 # mm per pixel
-FOCAL_LENGTH_MM = 3.04 # mm
-FOCAL_LENGTH_PX = FOCAL_LENGTH_MM / MM_PER_PIXEL # pixels
+# FROM CALIBRATION
+FOCAL_LENGTH = 1320 # pixels
 
 # SELF SELECTED VALUES
 WINDOW_WIDTH = 1000 # pixels
@@ -103,9 +101,8 @@ def main():
 					h = calculate_dist(tag.corners[0], tag.corners[2])
 					
 					# Use triangle similarity to get distance from camera to marker
-					dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH_PX, w)/10
-					# print(x, y, dist_cm)
-					print(300 * w / TAG_WIDTH)
+					dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH, w)/10
+					print(x, y, dist_cm)
     
 				# Check to see if the user closed the window
 				if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
