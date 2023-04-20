@@ -15,12 +15,16 @@ import apriltag.python.apriltag as apriltag
 
 connection_string = '/dev/ttyACM0'
 
-WINDOW_WIDTH = 1000
-WINDOW_HEIGHT = 700
+# FROM CALIBRATION
+FOCAL_LENGTH = 1320 # pixels
 
-KNOWN_WIDTH = 11
-KNOWN_HEIGHT = 8.5
-FOCAL_LENGTH = 1 # TODO: calibrate
+# See gstreamer
+WINDOW_WIDTH = 1920 # pixels
+WINDOW_HEIGHT = 1080 # pixels
+
+# STANDARD SQUARE TAG SIZE
+TAG_WIDTH = 28.57500 # mm
+TAG_HEIGHT = TAG_WIDTH # mm
 
 def gstreamer_pipeline(
     capture_width=1920,
@@ -74,12 +78,13 @@ def main():
 	video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
 	if video_capture.isOpened():
 		try:
-			cv2.namedWindow(window_title, cv2.WINDOW_NORMAL)
-			cv2.resizeWindow(window_title, WINDOW_WIDTH, WINDOW_HEIGHT)
+			cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
 			while True:
 				# Grab the video frame (ret is false if no frames have been grabbed)
 				ret, frame = video_capture.read()
-    			# Convert frame to grayscale
+				if not ret: 
+					continue
+    			# Convert image to grayscale
 				image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 				at_detector = apriltag.Detector(searchpath=apriltag._get_demo_searchpath())
 				# Get list of april tags
@@ -95,11 +100,11 @@ def main():
 					y = tag.center[1]
 					w = calculate_dist(tag.corners[0], tag.corners[1])
 					h = calculate_dist(tag.corners[0], tag.corners[2])
-					print(x, y, w, h)
 					
-				# Use triangle similarity to get distance from camera to marker
-				# inches = distance_to_camera(KNOWN_WIDTH, FOCAL_LENGTH, perceived_width)
-
+					# Use triangle similarity to get distance from camera to marker
+					dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH, w)/10
+					print(x, y, dist_cm)
+    
 				# Check to see if the user closed the window
 				if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
 					cv2.imshow(window_title, frame)
