@@ -96,11 +96,10 @@ def main():
 					y = tag.center[1]
 					w = calculate_dist(tag.corners[0], tag.corners[1])
 					h = calculate_dist(tag.corners[0], tag.corners[2])
-					print(x, y, w, h)
 					
-				# Use triangle similarity to get distance from camera to marker
-				dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH, w)/10
-				print(x, y, dist_cm)
+					# Use triangle similarity to get distance from camera to marker
+					dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH, w)/10
+					print(x, y, dist_cm)
     
 				# Check to see if the user closed the window
 				if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
