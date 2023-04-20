@@ -18,9 +18,9 @@ connection_string = '/dev/ttyACM0'
 # FROM CALIBRATION
 FOCAL_LENGTH = 1320 # pixels
 
-# SELF SELECTED VALUES
-WINDOW_WIDTH = 1000 # pixels
-WINDOW_HEIGHT = 800 # pixels
+# See gstreamer
+WINDOW_WIDTH = 1920 # pixels
+WINDOW_HEIGHT = 1080 # pixels
 
 # STANDARD SQUARE TAG SIZE
 TAG_WIDTH = 28.57500 # mm
@@ -78,8 +78,7 @@ def main():
 	video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
 	if video_capture.isOpened():
 		try:
-			cv2.namedWindow(window_title, cv2.WINDOW_NORMAL)
-			cv2.resizeWindow(window_title, WINDOW_WIDTH, WINDOW_HEIGHT)
+			cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
 			while True:
 				# Grab the video frame (ret is false if no frames have been grabbed)
 				ret, frame = video_capture.read()
