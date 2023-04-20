@@ -103,7 +103,7 @@ def main():
 					h = calculate_dist(tag.corners[0], tag.corners[2])
 					
 					# Use triangle similarity to get distance from camera to marker
-					dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH, w)/10
+					dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH_PX, w)/10
 					print(x, y, dist_cm)
     
 				# Check to see if the user closed the window
