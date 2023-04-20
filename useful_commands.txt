@@ -7,6 +7,9 @@ Virtual environment name: zkenv
 Focal length of raspberry pi camera
 3.04 mm
 
+To find available cameras
+v4l2-ctl --list-devices
+
 To find available ports:
 ls -lt /dev/tty*
 dmesg | grep tty
