@@ -104,7 +104,8 @@ def main():
 					
 					# Use triangle similarity to get distance from camera to marker
 					dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH_PX, w)/10
-					print(x, y, dist_cm)
+					# print(x, y, dist_cm)
+					print(300 * w / TAG_WIDTH)
     
 				# Check to see if the user closed the window
 				if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
