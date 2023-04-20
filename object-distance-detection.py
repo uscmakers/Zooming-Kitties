@@ -16,11 +16,12 @@ import apriltag.python.apriltag as apriltag
 connection_string = '/dev/ttyACM0'
 
 WINDOW_WIDTH = 1000
-WINDOW_HEIGHT = 700
+WINDOW_HEIGHT = 800
 
-KNOWN_WIDTH = 11
-KNOWN_HEIGHT = 8.5
-FOCAL_LENGTH = 1 # TODO: calibrate
+# UNITS: mm
+TAG_WIDTH = 30
+TAG_HEIGHT = 30
+FOCAL_LENGTH = 3.04 # SOURCE: RPi camera V2 datasheet
 
 def gstreamer_pipeline(
     capture_width=1920,
@@ -98,8 +99,9 @@ def main():
 					print(x, y, w, h)
 					
 				# Use triangle similarity to get distance from camera to marker
-				# inches = distance_to_camera(KNOWN_WIDTH, FOCAL_LENGTH, perceived_width)
-
+				dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH, w)/10
+				print(x, y, dist_cm)
+    
 				# Check to see if the user closed the window
 				if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
 					cv2.imshow(window_title, frame)
