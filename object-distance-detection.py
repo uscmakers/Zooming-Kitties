@@ -84,7 +84,7 @@ def main():
 				# Grab the video frame (ret is false if no frames have been grabbed)
 				ret, image = video_capture.read()
     			# Convert image to grayscale
-				# image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+				image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 				at_detector = apriltag.Detector(searchpath=apriltag._get_demo_searchpath())
 				# Get list of april tags
 				tags = at_detector.detect(image)
