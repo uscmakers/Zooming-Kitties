@@ -82,8 +82,8 @@ def main():
 			while True:
 				# Grab the video frame (ret is false if no frames have been grabbed)
 				ret, frame = video_capture.read()
-				if not ret: 
-					continue
+				# if not ret:
+					# continue
     			# Convert image to grayscale
 				image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 				at_detector = apriltag.Detector(searchpath=apriltag._get_demo_searchpath())
