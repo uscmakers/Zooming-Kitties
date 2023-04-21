@@ -1,5 +1,14 @@
 JETSON IP ADDRESS:
 ssh zk@172.20.10.2
+ssh zk@172.20.10.2
+
+Virtual environment name: zkenv
+
+Focal length of raspberry pi camera
+3.04 mm
+
+To find available cameras
+v4l2-ctl --list-devices
 
 To find available ports:
 ls -lt /dev/tty*
@@ -13,3 +22,10 @@ command to test vehicle simulation: /Documents/zk/ardupilot/Tools/autotest
 
 ./sim_vehicle.py -L OKrover --map --console
 
+
+
+To make a python library a "dynamic library"
+Execute the following terminal commands
+    LD_LIBRARY_PATH=/home/zk/Documents/Zooming-Kitties/apriltag/python
+    export LD_LIBRARY_PATH
+    sudo ldconfig
