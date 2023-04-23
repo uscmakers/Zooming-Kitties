@@ -69,10 +69,10 @@ def angle_to_marker(window_width, c_x):
 
 def main():
 
-	# vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
-	# print("Successfully connected to vehicle at " + connection_string + "!")
-	# vehicle.armed = True
-	# time.sleep(1)
+	vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
+	print("Successfully connected to vehicle at " + connection_string + "!")
+	vehicle.armed = True
+	time.sleep(1)
 
 	window_title = "Object Distance Detection"
 	video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
@@ -120,9 +120,9 @@ def main():
 	else:
 		print("Unable to open camera")
         
-	# vehicle.channels.overrides['3'] = 2000
-	# vehicle.armed = False
-	# vehicle.close()
+	vehicle.channels.overrides['3'] = 2000
+	vehicle.armed = False
+	vehicle.close()
 	print("Closed vehicle")
 
 if __name__ == "__main__":
