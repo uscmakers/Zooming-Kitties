@@ -11,20 +11,20 @@ import numpy as np
 import cv2
 import apriltag.python.apriltag as apriltag
 
+### CONFIGURATION ###
+
+connect_to_vehicle = True # enables/disables code dependent on Pixhawk connection (set to True for integrated testing)
+show_window = False # enables/disables camera feed window appearing on monitor (set to False for integrated testing)
+
 ### CONSTANTS ###
 
 connection_string = '/dev/ttyACM0'
 
-# FROM CALIBRATION
 FOCAL_LENGTH = 1320 # pixels
-
-# See gstreamer
 WINDOW_WIDTH = 1920 # pixels
 WINDOW_HEIGHT = 1080 # pixels
-
-# STANDARD SQUARE TAG SIZE
 TAG_WIDTH = 28.57500 # mm
-TAG_HEIGHT = TAG_WIDTH # mm
+TAG_HEIGHT = 28.57500 # mm
 
 def gstreamer_pipeline(
     capture_width=1920,
@@ -68,11 +68,11 @@ def angle_to_marker(window_width, c_x):
 ### MAIN ROUTINE ###
 
 def main():
-
-	#vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
-	#print("Successfully connected to vehicle at " + connection_string + "!")
-	#vehicle.armed = True
-	#time.sleep(1)
+	if connect_to_vehicle:
+		vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
+		print("Successfully connected to vehicle at " + connection_string + "!")
+		vehicle.armed = True
+		time.sleep(1)
 
 	window_title = "Object Distance Detection"
 	video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
@@ -105,11 +105,12 @@ def main():
 					dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH, w)/10
 					print(x, y, dist_cm)
     
-				# Check to see if the user closed the window
-				#if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
-					#cv2.imshow(window_title, frame)
-				#else:
-					#break
+				if show_window:
+        			# Check to see if the user closed the window
+					if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
+						cv2.imshow(window_title, frame)
+					else:
+						break
 				keyCode = cv2.waitKey(10) & 0xFF
 				# Stop the program on the ESC key or 'q'
 				if keyCode == 27 or keyCode == ord('q'):
@@ -119,11 +120,12 @@ def main():
 			cv2.destroyAllWindows()
 	else:
 		print("Unable to open camera")
-        
-	#vehicle.channels.overrides['3'] = 2000
-	#vehicle.armed = False
-	#vehicle.close()
-	#print("Closed vehicle")
+      
+	if connect_to_vehicle:  
+		vehicle.channels.overrides['3'] = 2000
+		vehicle.armed = False
+		vehicle.close()
+		print("Closed vehicle")
 
 if __name__ == "__main__":
     main()
