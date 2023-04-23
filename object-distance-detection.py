@@ -69,10 +69,10 @@ def angle_to_marker(window_width, c_x):
 
 def main():
 
-	vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
-	print("Successfully connected to vehicle at " + connection_string + "!")
-	vehicle.armed = True
-	time.sleep(1)
+	#vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
+	#print("Successfully connected to vehicle at " + connection_string + "!")
+	#vehicle.armed = True
+	#time.sleep(1)
 
 	window_title = "Object Distance Detection"
 	video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
@@ -106,10 +106,10 @@ def main():
 					print(x, y, dist_cm)
     
 				# Check to see if the user closed the window
-				if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
-					cv2.imshow(window_title, frame)
-				else:
-					break
+				#if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
+					#cv2.imshow(window_title, frame)
+				#else:
+					#break
 				keyCode = cv2.waitKey(10) & 0xFF
 				# Stop the program on the ESC key or 'q'
 				if keyCode == 27 or keyCode == ord('q'):
@@ -120,10 +120,10 @@ def main():
 	else:
 		print("Unable to open camera")
         
-	vehicle.channels.overrides['3'] = 2000
-	vehicle.armed = False
-	vehicle.close()
-	print("Closed vehicle")
+	#vehicle.channels.overrides['3'] = 2000
+	#vehicle.armed = False
+	#vehicle.close()
+	#print("Closed vehicle")
 
 if __name__ == "__main__":
     main()
