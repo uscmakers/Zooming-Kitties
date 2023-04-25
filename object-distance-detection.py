@@ -21,16 +21,20 @@ show_window = False # enables/disables camera feed window appearing on monitor (
 connection_string = '/dev/ttyACM0'
 
 FOCAL_LENGTH = 1320 # pixels
-WINDOW_WIDTH = 1920 # pixels
-WINDOW_HEIGHT = 1080 # pixels
+CAPTURE_WIDTH = 1920 # pixels
+CAPTURE_HEIGHT = 1080 # pixels
+DISPLAY_WIDTH = 960 # pixels
+DISPLAY_HEIGHT = 540 # pixels
 TAG_WIDTH = 28.57500 # mm
 TAG_HEIGHT = 28.57500 # mm
+LOWER_THRESH_DIST = 60 # cm
+UPPER_THRESH_DIST = 600 # cm
 
 def gstreamer_pipeline(
-    capture_width=1920,
-    capture_height=1080,
-    display_width=960,
-    display_height=540,
+    capture_width=CAPTURE_WIDTH,
+    capture_height=CAPTURE_HEIGHT,
+    display_width=DISPLAY_WIDTH,
+    display_height=DISPLAY_HEIGHT,
     framerate=30,
     flip_method=0,
 ):
@@ -65,6 +69,12 @@ def distance_to_camera(W, F, P):
 def angle_to_marker(window_width, c_x):
     return (1000/window_width)*c_x + 1000
 
+def speed_from_dist(dist):
+	speed = -1000/(UPPER_THRESH_DIST-LOWER_THRESH_DIST) * (dist-LOWER_THRESH_DIST) + 2000
+	if speed > 2000: speed = 2000
+	if speed < 1000: speed = 1000
+	return speed
+
 ### MAIN ROUTINE ###
 
 def main():
@@ -73,6 +83,8 @@ def main():
 		print("Successfully connected to vehicle at " + connection_string + "!")
 		vehicle.armed = True
 		time.sleep(1)
+		vehicle.channels.overrides['1'] = 1500
+		vehicle.channels.overrides['3'] = 2000
 
 	window_title = "Object Distance Detection"
 	video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
@@ -90,20 +102,25 @@ def main():
 				# Get list of april tags
 				tags = at_detector.detect(image)
        			
-				if len(tags) > 0:
-					print("detected")
-				else:
-					print("nothing")
-          		
-				for tag in tags:
-					x = tag.center[0]
-					y = tag.center[1]
-					w = calculate_dist(tag.corners[0], tag.corners[1])
-					h = calculate_dist(tag.corners[0], tag.corners[2])
-					
-					# Use triangle similarity to get distance from camera to marker
-					dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH, w)/10
-					print(x, y, dist_cm)
+				if connect_to_vehicle:
+					if len(tags) > 0:
+						tag = tags[0] # Arbitrarily pick first tag
+						x = tag.center[0]
+						y = tag.center[1]
+						w = calculate_dist(tag.corners[0], tag.corners[1])
+						h = calculate_dist(tag.corners[0], tag.corners[2])
+      					# Use triangle similarity to get distance from camera to marker
+						dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH, w)/10
+						# Get servo value from x pos of marker in window
+						servo_motor_val = angle_to_marker(DISPLAY_WIDTH, x)
+						dc_motor_val = speed_from_dist(dist_cm)
+						# Motor control
+						vehicle.channels.overrides['1'] = servo_motor_val
+						vehicle.channels.overrides['3'] = dc_motor_val
+					else:
+						# Stop vehicle if no marker detected
+						vehicle.channels.overrides['1'] = 1500
+						vehicle.channels.overrides['3'] = 2000
     
 				if show_window:
         			# Check to see if the user closed the window
