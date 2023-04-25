@@ -28,7 +28,7 @@ DISPLAY_HEIGHT = 540 # pixels
 TAG_WIDTH = 28.57500 # mm
 TAG_HEIGHT = 28.57500 # mm
 LOWER_THRESH_DIST = 60 # cm
-UPPER_THRESH_DIST = 600 # cm
+UPPER_THRESH_DIST = 1200 # cm
 
 def gstreamer_pipeline(
     capture_width=CAPTURE_WIDTH,
