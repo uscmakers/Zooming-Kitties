@@ -78,6 +78,7 @@ def speed_from_dist(dist):
 ### MAIN ROUTINE ###
 
 def main():
+	print("program started")
 	if connect_to_vehicle:
 		vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
 		print("Successfully connected to vehicle at " + connection_string + "!")
