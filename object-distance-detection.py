@@ -104,6 +104,7 @@ def main():
        			
 				if connect_to_vehicle:
 					if len(tags) > 0:
+						print("detected")
 						tag = tags[0] # Arbitrarily pick first tag
 						x = tag.center[0]
 						y = tag.center[1]
@@ -111,6 +112,7 @@ def main():
 						h = calculate_dist(tag.corners[0], tag.corners[2])
       					# Use triangle similarity to get distance from camera to marker
 						dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH, w)/10
+						print(x, y, dist_cm)
 						# Get servo value from x pos of marker in window
 						servo_motor_val = angle_to_marker(DISPLAY_WIDTH, x)
 						dc_motor_val = speed_from_dist(dist_cm)
@@ -118,6 +120,7 @@ def main():
 						vehicle.channels.overrides['1'] = servo_motor_val
 						vehicle.channels.overrides['3'] = dc_motor_val
 					else:
+						print("nothing")
 						# Stop vehicle if no marker detected
 						vehicle.channels.overrides['1'] = 1500
 						vehicle.channels.overrides['3'] = 2000
