@@ -78,7 +78,7 @@ def speed_from_dist(dist):
 ### MAIN ROUTINE ###
 
 def main():
-	print("Program started")
+	print("program started")
 	if connect_to_vehicle:
 		vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
 		print("Successfully connected to vehicle at " + connection_string + "!")
@@ -95,7 +95,8 @@ def main():
 			while True:
 				# Grab the video frame (ret is false if no frames have been grabbed)
 				ret, frame = video_capture.read()
-
+				# if not ret:
+					# continue
     			# Convert image to grayscale
 				image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 				at_detector = apriltag.Detector(searchpath=apriltag._get_demo_searchpath())
