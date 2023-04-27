@@ -84,8 +84,6 @@ def main():
 		print("Successfully connected to vehicle at " + connection_string + "!")
 		vehicle.armed = True
 		time.sleep(1)
-		vehicle.channels.overrides['1'] = 1500
-		vehicle.channels.overrides['3'] = 2000
 
 	window_title = "Object Distance Detection"
 	video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
