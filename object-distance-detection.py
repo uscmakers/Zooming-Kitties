@@ -119,8 +119,9 @@ def main():
 						servo_motor_val = angle_to_marker(DISPLAY_WIDTH, x)
 						dc_motor_val = speed_from_dist(dist_cm)
 						# Motor control
-						vehicle.channels.overrides['1'] = servo_motor_val
-						vehicle.channels.overrides['3'] = dc_motor_val
+						print(x, y, dist_cm, servo_motor_val, dc_motor_val)
+						vehicle.channels.overrides['1'] = int(servo_motor_val)
+						vehicle.channels.overrides['3'] = int(dc_motor_val)
 					else:
 						print("nothing")
 						# Stop vehicle if no marker detected
