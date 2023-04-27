@@ -14,7 +14,7 @@ import apriltag.python.apriltag as apriltag
 ### CONFIGURATION ###
 
 connect_to_vehicle = True # enables/disables code dependent on Pixhawk connection (set to True for integrated testing)
-show_window = False # enables/disables camera feed window appearing on monitor (set to False for integrated testing)
+show_window = True # enables/disables camera feed window appearing on monitor (set to False for integrated testing)
 
 ### CONSTANTS ###
 
@@ -114,14 +114,13 @@ def main():
 						h = calculate_dist(tag.corners[0], tag.corners[2])
       					# Use triangle similarity to get distance from camera to marker
 						dist_cm = distance_to_camera(TAG_WIDTH, FOCAL_LENGTH, w)/10
-						print(x, y, dist_cm)
 						# Get servo value from x pos of marker in window
-						servo_motor_val = angle_to_marker(DISPLAY_WIDTH, x)
-						dc_motor_val = speed_from_dist(dist_cm)
+						servo_motor_val = int(angle_to_marker(DISPLAY_WIDTH, x))
+						dc_motor_val = int(speed_from_dist(dist_cm))
 						# Motor control
 						print(x, y, dist_cm, servo_motor_val, dc_motor_val)
-						vehicle.channels.overrides['1'] = int(servo_motor_val)
-						vehicle.channels.overrides['3'] = int(dc_motor_val)
+						vehicle.channels.overrides['1'] = servo_motor_val
+						vehicle.channels.overrides['3'] = dc_motor_val
 					else:
 						print("nothing")
 						# Stop vehicle if no marker detected
