@@ -14,7 +14,7 @@ import apriltag.python.apriltag as apriltag
 ### CONFIGURATION ###
 
 connect_to_vehicle = True # enables/disables code dependent on Pixhawk connection (set to True for integrated testing)
-show_window = False # enables/disables camera feed window appearing on monitor (set to False for integrated testing)
+show_window = True # enables/disables camera feed window appearing on monitor (set to False for integrated testing)
 
 ### CONSTANTS ###
 
@@ -78,7 +78,7 @@ def speed_from_dist(dist):
 ### MAIN ROUTINE ###
 
 def main():
-	print("program started")
+	print("Program started")
 	if connect_to_vehicle:
 		vehicle = connect(connection_string, wait_ready=True, baud=115200, timeout=60)
 		print("Successfully connected to vehicle at " + connection_string + "!")
