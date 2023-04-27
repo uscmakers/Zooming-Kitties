@@ -67,7 +67,7 @@ def distance_to_camera(W, F, P):
 	return (W * F) / P
 
 def angle_to_marker(window_width, c_x):
-    return (1000/window_width)*c_x + 1000
+    return 2000-(1000/window_width)*c_x
 
 def speed_from_dist(dist):
 	speed = -1000/(UPPER_THRESH_DIST-LOWER_THRESH_DIST) * (dist-LOWER_THRESH_DIST) + 2000
@@ -122,7 +122,6 @@ def main():
 					else:
 						print("nothing")
 						# Stop vehicle if no marker detected
-						vehicle.channels.overrides['1'] = 1500
 						# vehicle.channels.overrides['3'] = 2000
     
 				if show_window:
