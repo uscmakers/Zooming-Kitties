@@ -14,7 +14,7 @@ import apriltag.python.apriltag as apriltag
 ### CONFIGURATION ###
 
 connect_to_vehicle = True # enables/disables code dependent on Pixhawk connection (set to True for integrated testing)
-show_window = True # enables/disables camera feed window appearing on monitor (set to False for integrated testing)
+show_window = False # enables/disables camera feed window appearing on monitor (set to False for integrated testing)
 
 ### CONSTANTS ###
 
