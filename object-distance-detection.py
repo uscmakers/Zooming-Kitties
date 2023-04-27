@@ -118,7 +118,7 @@ def main():
 						# Motor control
 						print(x, y, dist_cm, servo_motor_val, dc_motor_val)
 						vehicle.channels.overrides['1'] = servo_motor_val
-						vehicle.channels.overrides['3'] = dc_motor_val
+						# vehicle.channels.overrides['3'] = dc_motor_val
 					else:
 						print("nothing")
 						# Stop vehicle if no marker detected
