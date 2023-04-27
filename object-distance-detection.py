@@ -91,17 +91,14 @@ def main():
 	video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
 	if video_capture.isOpened():
 		try:
-			cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
-			print("named window")
+			if show_window:
+				cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
 			while True:
 				# Grab the video frame (ret is false if no frames have been grabbed)
 				ret, frame = video_capture.read()
-				print("video capture read")
-				# if not ret:
-					# continue
+
     			# Convert image to grayscale
 				image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-				print("grayscale image generated")
 				at_detector = apriltag.Detector(searchpath=apriltag._get_demo_searchpath())
 				# Get list of april tags
 				tags = at_detector.detect(image)
