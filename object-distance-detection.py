@@ -91,8 +91,7 @@ def main():
 	video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
 	if video_capture.isOpened():
 		try:
-			if show_window:
-				cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
+			cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
 			while True:
 				# Grab the video frame (ret is false if no frames have been grabbed)
 				ret, frame = video_capture.read()
