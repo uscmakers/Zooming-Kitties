@@ -122,7 +122,7 @@ def main():
 					else:
 						print("nothing")
 						# Stop vehicle if no marker detected
-						# vehicle.channels.overrides['3'] = 2000
+						# vehicle.channels.overrides['3'] = 1000
     
 				if show_window:
         			# Check to see if the user closed the window
