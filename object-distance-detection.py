@@ -89,6 +89,7 @@ def main():
 
 	window_title = "Object Distance Detection"
 	video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
+	print("video capture obtained")
 	if video_capture.isOpened():
 		try:
 			cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
